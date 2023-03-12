@@ -2,15 +2,16 @@ name: build-image
 
 on:
   workflow_dispatch:
-    basefrom:
-      description: 'Base image to use'
-      required: true
-      default: andzuc/debian-base
-    codium_version:
-      description: 'VSCodium release version'
-      required: true
-      default: 1.56.2
-    
+    inputs:
+      basefrom:
+        description: 'Base image to use'
+        required: true
+        default: andzuc/debian-base
+      codium_version:
+        description: 'VSCodium release version'
+        required: true
+        default: 1.56.2
+        
 jobs:
   build-image:
     env:
