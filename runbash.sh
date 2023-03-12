@@ -6,7 +6,6 @@ PROFILEDIR="${HOME}/dev/vscodium"
 
 if [ -d "${PROFILEDIR}" ] ; then
     docker run -it \
-	   --privileged \
 	   --name vscodium \
 	   --rm \
 	   --net=host \
@@ -14,7 +13,7 @@ if [ -d "${PROFILEDIR}" ] ; then
 	   --mount "type=bind,src=${HOME}/.Xauthority,dst=/home/vscodium/.Xauthority,readonly" \
  	   --mount "type=bind,src=${PROFILEDIR},dst=/home/vscodium" \
 	   --entrypoint /bin/bash \
-	   andzuc/debian-vscodium:latest
+	   andzuc/debian-vscodium:1.56.2
 else
     echo "Profile not found: ${PROFILE}"
 fi
