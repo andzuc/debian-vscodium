@@ -2,14 +2,21 @@ name: build-image
 
 on:
   workflow_dispatch:
-
-env:
-  BASEFROM: andzuc/debian-base
-  VERSION: 1.56.2
-  IMAGENAME: debian-vscodium
+    basefrom:
+      description: 'Base image to use'
+      required: true
+      default: andzuc/debian-base
+    codium_version:
+      description: 'VSCodium release version'
+      required: true
+      default: 1.56.2
     
 jobs:
   build-image:
+    env:
+      BASEFROM: ${{ github.event.inputs.basefrom }}
+      VERSION: ${{ github.event.inputs.codium_version }}
+      IMAGENAME: debian-vscodium
     runs-on: ubuntu-latest
     steps:
       - name: Get current date
