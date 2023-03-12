@@ -1,0 +1,51 @@
+name: build-image
+
+on:
+  workflow_dispatch:
+
+env:
+  BASEFROM: andzuc/debian-base
+  VERSION: 1.56.2
+  IMAGENAME: andzuc/debian-vscodium:${{ VERSION }}
+    
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d')"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=10485760
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:context"
+          build-args: |
+            BASEFROM=${{ env.VERSION }}
+            VERSION=${{ env.VERSION }}
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ghcr.io/andzuc/${{ env.IMAGENAME }}:${{ env.VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGENAME }}:${{ env.VERSION }}
