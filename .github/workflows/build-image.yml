@@ -6,7 +6,7 @@ on:
 env:
   BASEFROM: andzuc/debian-base
   VERSION: 1.56.2
-  IMAGENAME: andzuc/debian-vscodium
+  IMAGENAME: debian-vscodium
     
 jobs:
   build-image:
