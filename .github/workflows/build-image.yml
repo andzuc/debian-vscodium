@@ -42,7 +42,7 @@ jobs:
         with:
           context: "{{defaultContext}}:context"
           build-args: |
-            BASEFROM=${{ env.VERSION }}
+            BASEFROM=${{ env.BASEFROM }}
             VERSION=${{ env.VERSION }}
           push: true
           platforms: linux/amd64
